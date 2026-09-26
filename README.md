@@ -1,8 +1,6 @@
 # Python Refresh
 
-A fast Python refresher with industrial examples (machines, PLCs, OEE).
-It is Phase 0 of my rebuild journey: relearn the fundamentals, then rebuild
-industrial automation, AI and RPA projects as reusable templates.
+A fast Python refresher with industrial examples (machines, PLCs, OEE). It is Phase 0 of my rebuild journey: relearn the fundamentals, then rebuild industrial automation, AI and RPA projects as reusable templates.
 
 ## Lessons
 
@@ -17,7 +15,7 @@ industrial automation, AI and RPA projects as reusable templates.
 
 ## Project layout
 
-```
+```text
 python-refresh/
 ├── lessons/            # notes for each topic
 ├── examples/           # runnable reference code
@@ -38,7 +36,7 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements-dev.txt
 
-cd examples; python main.py; cd ..     # writes logs\app.log
+cd examples; python main.py; cd ..  # writes logs\app.log
 pytest -v
 ```
 

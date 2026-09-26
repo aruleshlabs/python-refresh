@@ -7,11 +7,11 @@ Runnable versions of every example are in [`examples/`](../examples).
 A function is a named, reusable block: inputs in, output out.
 
 ```python
-def oee(availability, performance, quality=1.0):      # default value
+def oee(availability, performance, quality=1.0):  # default value
     """Return OEE as a fraction (0 to 1)."""
     return availability * performance * quality
 
-oee(0.9, 0.95)                                         # positional → 0.855
+oee(0.9, 0.95)  # positional → 0.855
 oee(quality=0.98, availability=0.9, performance=0.95)  # keyword, any order
 ```
 
@@ -24,7 +24,7 @@ total, best, worst = shift_stats([120, 135, 98])
 # *args = any positional arguments, **kwargs = any keyword arguments
 def log(msg, *tags, **extra):
     print(msg, tags, extra)
-log("Alarm", "M1", "HIGH", code=504)   # Alarm ('M1', 'HIGH') {'code': 504}
+log("Alarm", "M1", "HIGH", code=504)  # Alarm ('M1', 'HIGH') {'code': 504}
 
 # Never use a mutable default like [] (it is shared between calls)
 def add_alarm(a, history=None):
@@ -40,15 +40,14 @@ machines.sort(key=lambda m: m[1], reverse=True)
 
 ## 2. Classes
 
-A class is a blueprint bundling **data** (attributes) and **behaviour** (methods).
-Each object made from it is an *instance*.
+A class is a blueprint bundling **data** (attributes) and **behaviour** (methods). Each object made from it is an *instance*.
 
 ```python
 class Machine:
-    plant = "C-101"                          # class attribute (shared)
+    plant = "C-101"  # class attribute (shared)
 
-    def __init__(self, name, ideal_rate):    # constructor
-        self.name = name                     # instance attributes
+    def __init__(self, name, ideal_rate):  # constructor
+        self.name = name  # instance attributes
         self.ideal_rate = ideal_rate
         self.count = 0
         self.state = "IDLE"
@@ -86,7 +85,7 @@ class MitsubishiPLC(PLC):
         return f"SLMP read {tag} from {self.ip}"
 
 for plc in [SiemensPLC("192.168.0.1"), MitsubishiPLC("192.168.0.2")]:
-    print(plc.read("D100"))       # same call, different behaviour
+    print(plc.read("D100"))  # same call, different behaviour
 ```
 
 **Dataclass**, a shortcut for classes that mostly hold data:
@@ -105,7 +104,7 @@ class Tag:
 
 A **module** is a `.py` file; a **package** is a folder of modules with an `__init__.py`.
 
-```
+```text
 examples/
 ├── main.py
 └── plant/
@@ -115,9 +114,9 @@ examples/
 ```
 
 ```python
-from plant.machine import Machine   # import one name
-from plant import kpi               # import the module → kpi.oee(...)
-import datetime as dt               # alias
+from plant.machine import Machine  # import one name
+from plant import kpi  # import the module → kpi.oee(...)
+import datetime as dt  # alias
 ```
 
 The `__main__` guard: code under it runs only when the file is run directly, not when imported.
@@ -127,15 +126,14 @@ if __name__ == "__main__":
     print(oee(0.9, 0.95, 0.98))
 ```
 
-Standard-library modules you will use constantly: `os`, `pathlib`, `json`, `csv`,
-`datetime`, `time`, `logging`, `struct` (PLC bytes), `socket` (SLMP), `sqlite3`.
+Standard-library modules you will use constantly: `os`, `pathlib`, `json`, `csv`, `datetime`, `time`, `logging`, `struct` (PLC bytes), `socket` (SLMP), `sqlite3`.
 
 ## 4. Exceptions
 
 ```python
 try:
     value = int("12a")
-except ValueError as e:          # specific error
+except ValueError as e:  # specific error
     print("Bad number:", e)
 else:
     print("Only if NO error")

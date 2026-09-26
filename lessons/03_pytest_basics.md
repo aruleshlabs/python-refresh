@@ -1,8 +1,6 @@
 # Lesson 03 — pytest Basics
 
-**Why test?** When you change the OEE formula or the PLC retry logic, you want to know in
-1 second that nothing else broke. At a factory, a bug found by a test costs you nothing; a bug
-found on the line costs a production day.
+**Why test?** When you change the OEE formula or the PLC retry logic, you want to know in 1 second that nothing else broke. At a factory, a bug found by a test costs you nothing; a bug found on the line costs a production day.
 
 ## 1. How pytest finds tests
 
@@ -15,22 +13,22 @@ found on the line costs a production day.
 from plant import kpi
 
 def test_quality_zero_total():
-    assert kpi.quality(0, 0) == 0.0     # plain assert, no special methods
+    assert kpi.quality(0, 0) == 0.0  # plain assert, no special methods
 ```
 
-If the assert fails, pytest shows both sides of the comparison. No `print` needed.
+If the `assert` fails, pytest shows both sides of the comparison. No `print` needed.
 
 ## 2. Running tests
 
 ```powershell
-pytest                     # run everything
-pytest -v                  # verbose: one line per test
-pytest tests/test_kpi.py   # one file
-pytest tests/test_kpi.py::test_oee   # one test
-pytest -k "retry"          # tests whose name contains "retry"
-pytest -x                  # stop at first failure
-pytest --lf                # re-run only last failures
-pytest -s                  # show print() output
+pytest  # run everything
+pytest -v  # verbose: one line per test
+pytest tests/test_kpi.py  # one file
+pytest tests/test_kpi.py::test_oee  # one test
+pytest -k "retry"  # tests whose name contains "retry"
+pytest -x  # stop at first failure
+pytest --lf  # re-run only last failures
+pytest -s  # show print() output
 ```
 
 Project config lives in [`pytest.ini`](../pytest.ini):
@@ -38,13 +36,13 @@ Project config lives in [`pytest.ini`](../pytest.ini):
 ```ini
 [pytest]
 testpaths = tests
-pythonpath = examples      # so tests can "import plant" without sys.path hacks
-addopts = -ra              # summary of skipped/failed at the end
+pythonpath = examples  # so tests can "import plant" without sys.path hacks
+addopts = -ra  # summary of skipped/failed at the end
 ```
 
 ## 3. Floats: `pytest.approx`
 
-`0.9 * 0.95 * 0.98 == 0.8379` is **False** in floating point. Always compare floats with approx:
+`0.9 * 0.95 * 0.98 == 0.8379` is `False` in floating point. Always compare floats with approx:
 
 ```python
 assert kpi.oee(0.9, 0.95, 0.98) == pytest.approx(0.8379)
@@ -54,7 +52,7 @@ assert kpi.oee(0.9, 0.95, 0.98) == pytest.approx(0.8379)
 
 ```python
 def test_produce_when_idle_raises(machine):
-    with pytest.raises(RuntimeError, match="not running"):   # match = regex on message
+    with pytest.raises(RuntimeError, match="not running"):  # match = regex on message
         machine.produce(5)
 ```
 
@@ -76,17 +74,16 @@ Each row shows up as its own test: `test_availability_cases[480-120-0.75]`.
 
 ## 6. Fixtures: reusable setup
 
-A fixture builds something a test needs. Tests ask for it **by argument name**.
-Put shared fixtures in `tests/conftest.py`; pytest loads it automatically.
+A fixture builds something a test needs. Tests ask for it **by argument name**. Put shared fixtures in `tests/conftest.py`; pytest loads it automatically.
 
 ```python
 # tests/conftest.py
 @pytest.fixture
 def machine():
-    return Machine("M1", ideal_rate=100)     # fresh object for every test
+    return Machine("M1", ideal_rate=100)  # fresh object for every test
 
 @pytest.fixture
-def running_machine(machine):                # fixtures can use fixtures
+def running_machine(machine):  # fixtures can use fixtures
     machine.start()
     return machine
 ```
@@ -97,8 +94,7 @@ def test_produce_adds_count(running_machine):
     assert running_machine.count == 90
 ```
 
-Fixtures with cleanup use `yield`: code after `yield` runs after the test, even if it failed
-(perfect for closing DB/PLC connections):
+Fixtures with cleanup use `yield`: code after `yield` runs after the test, even if it failed (perfect for closing DB/PLC connections):
 
 ```python
 @pytest.fixture
@@ -120,7 +116,7 @@ def db():
 **monkeypatch:** make retry tests instant by replacing `time.sleep`:
 
 ```python
-@pytest.fixture(autouse=True)            # autouse = applies to every test in the file
+@pytest.fixture(autouse=True)  # autouse = applies to every test in the file
 def no_sleep(monkeypatch):
     monkeypatch.setattr(plc.time, "sleep", lambda s: None)
 ```
@@ -136,13 +132,12 @@ def test_stop_logs_warning(running_machine, caplog):
 
 ## 8. Fakes: testing PLC code without a PLC
 
-Pass a fake function/object instead of the real PLC. This is how the whole rebuild is tested
-without hardware:
+Pass a fake function/object instead of the real PLC. This is how the whole rebuild is tested without hardware:
 
 ```python
 def test_retry_succeeds_on_third_try():
     calls = []
-    def flaky(tag):                       # fake PLC: fails twice, then answers
+    def flaky(tag):  # fake PLC: fails twice, then answers
         calls.append(tag)
         if len(calls) < 3:
             raise PLCConnectionError("offline")

@@ -16,7 +16,7 @@ WHERE ts >= '2026-09-25 06:00:00' AND ts < '2026-09-26 06:00:00';
 SELECT p.part_qr, p.ts, m.code AS machine, l.name AS line
 FROM production p
 JOIN machine m ON m.machine_id = p.machine_id
-JOIN line    l ON l.line_id    = m.line_id
+JOIN line l ON l.line_id = m.line_id
 ORDER BY p.ts
 LIMIT 10;
 
@@ -37,18 +37,18 @@ WHERE p.production_id IS NULL;
 SELECT m.code, a.alarm_code, d.text, d.severity, a.start_ts,
        TIMESTAMPDIFF(MINUTE, a.start_ts, NOW()) AS minutes_active
 FROM alarm_history a
-JOIN machine   m ON m.machine_id = a.machine_id
+JOIN machine m ON m.machine_id = a.machine_id
 JOIN alarm_def d ON d.alarm_code = a.alarm_code
 WHERE a.end_ts IS NULL;
 
 -- ---------- 3. GROUP BY + aggregates ----------
 -- Count, OK/NG split and yield per machine
 SELECT m.code,
-       COUNT(*)                               AS total,
-       SUM(p.result = 'OK')                   AS ok,        -- TRUE counts as 1
-       SUM(p.result = 'NG')                   AS ng,
+       COUNT(*) AS total,
+       SUM(p.result = 'OK') AS ok,  -- TRUE counts as 1
+       SUM(p.result = 'NG') AS ng,
        ROUND(100 * SUM(p.result = 'OK') / COUNT(*), 1) AS yield_pct,
-       ROUND(AVG(p.cycle_time_s), 1)          AS avg_cycle_s
+       ROUND(AVG(p.cycle_time_s), 1) AS avg_cycle_s
 FROM production p
 JOIN machine m ON m.machine_id = p.machine_id
 GROUP BY m.code;
@@ -139,7 +139,7 @@ WITH hourly AS (
 )
 SELECT hour_bucket,
        parts,
-       SUM(parts) OVER (ORDER BY hour_bucket)         AS running_total,
+       SUM(parts) OVER (ORDER BY hour_bucket) AS running_total,
        parts - LAG(parts) OVER (ORDER BY hour_bucket) AS change_vs_prev
 FROM hourly
 ORDER BY hour_bucket;
