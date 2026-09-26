@@ -11,8 +11,6 @@ industrial automation, AI and RPA projects as reusable templates.
 | 01 | Functions, classes, modules, exceptions | [lessons/01](lessons/01_functions_classes_modules_exceptions.md) |
 | 02 | venv, pip, requirements.txt, logging | [lessons/02](lessons/02_venv_pip_requirements_logging.md) |
 
-Exercises: [exercises/EXERCISES.md](exercises/EXERCISES.md)
-
 ## Project layout
 
 ```
@@ -22,7 +20,6 @@ python-refresh/
 │   ├── main.py         # demo: machine, OEE, PLC polymorphism, retry, logging
 │   ├── logger_setup.py # console + rotating file logging
 │   └── plant/          # package: kpi, machine, plc, errors
-├── exercises/          # my practice work
 ├── tests/              # pytest tests for the examples
 ├── requirements.txt
 └── requirements-dev.txt
