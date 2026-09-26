@@ -12,6 +12,8 @@ industrial automation, AI and RPA projects as reusable templates.
 | 02 | venv, pip, requirements.txt, logging | [lessons/02](lessons/02_venv_pip_requirements_logging.md) |
 | 03 | pytest basics | [lessons/03](lessons/03_pytest_basics.md) |
 | 04 | Git basics + GitHub profile | [lessons/04](lessons/04_git_basics.md) |
+| 05 | SQL: schema design, keys, indexes | [lessons/05](lessons/05_sql_schema_keys_indexes.md) |
+| 06 | SQL: joins, GROUP BY, time buckets (hourly/shift) | [lessons/06](lessons/06_sql_joins_groupby_time_buckets.md) |
 
 ## Project layout
 
@@ -22,6 +24,7 @@ python-refresh/
 │   ├── main.py         # demo: machine, OEE, PLC polymorphism, retry, logging
 │   ├── logger_setup.py # console + rotating file logging
 │   └── plant/          # package: kpi, machine, plc, errors
+├── sql/                # MySQL: factory schema, seed data, queries
 ├── tests/              # pytest: fixtures, parametrize, monkeypatch, caplog
 ├── pytest.ini
 ├── requirements.txt
@@ -39,6 +42,3 @@ cd examples; python main.py; cd ..     # writes logs\app.log
 pytest -v
 ```
 
-## Topics coming next
-
-SQL on MySQL
